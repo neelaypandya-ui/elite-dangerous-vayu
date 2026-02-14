@@ -11,6 +11,7 @@ const LS_VOICE_PITCH = 'vayu-voice-pitch';
 const LS_TTS_MODE    = 'vayu-tts-mode'; // 'browser' | 'server' | 'off'
 const LS_INPUT_DEV   = 'vayu-input-device';
 const LS_OUTPUT_DEV  = 'vayu-output-device';
+const LS_BOOM_DETECT = 'vayu-boom-detect';
 
 function loadPref(key: string, fallback: string): string {
   try { return localStorage.getItem(key) || fallback; } catch { return fallback; }
@@ -197,6 +198,10 @@ export default function Covas() {
   const [interimText, setInterimText] = useState('');
   const [micLevel, setMicLevel] = useState(0);
 
+  // Boom detection state
+  const [boomDetect, setBoomDetect] = useState<boolean>(() => loadPref(LS_BOOM_DETECT, 'false') === 'true');
+  const [boomState, setBoomState] = useState<'up' | 'down' | 'unknown'>('unknown');
+
   // Refs
   const recognitionRef = useRef<any>(null);
   const vadStreamRef = useRef<MediaStream | null>(null);
@@ -212,12 +217,24 @@ export default function Covas() {
   const voiceRateRef = useRef(voiceRate);
   const voicePitchRef = useRef(voicePitch);
 
+  // Boom detection refs
+  const boomStreamRef = useRef<MediaStream | null>(null);
+  const boomAnalyserRef = useRef<AnalyserNode | null>(null);
+  const boomAudioCtxRef = useRef<AudioContext | null>(null);
+  const boomIntervalRef = useRef<number | null>(null);
+  const boomSilenceCountRef = useRef(0);
+  const boomActiveCountRef = useRef(0);
+  const boomDetectRef = useRef(boomDetect);
+  const listeningRef = useRef(listening);
+
   // Keep refs in sync
   useEffect(() => { selectedOutputRef.current = selectedOutput; }, [selectedOutput]);
   useEffect(() => { ttsModeRef.current = ttsMode; }, [ttsMode]);
   useEffect(() => { voiceNameRef.current = voiceName; }, [voiceName]);
   useEffect(() => { voiceRateRef.current = voiceRate; }, [voiceRate]);
   useEffect(() => { voicePitchRef.current = voicePitch; }, [voicePitch]);
+  useEffect(() => { boomDetectRef.current = boomDetect; }, [boomDetect]);
+  useEffect(() => { listeningRef.current = listening; }, [listening]);
 
   // Persist preferences
   useEffect(() => { savePref(LS_TTS_MODE, ttsMode); }, [ttsMode]);
@@ -226,6 +243,7 @@ export default function Covas() {
   useEffect(() => { savePref(LS_VOICE_PITCH, String(voicePitch)); }, [voicePitch]);
   useEffect(() => { savePref(LS_INPUT_DEV, selectedInput); }, [selectedInput]);
   useEffect(() => { savePref(LS_OUTPUT_DEV, selectedOutput); }, [selectedOutput]);
+  useEffect(() => { savePref(LS_BOOM_DETECT, String(boomDetect)); }, [boomDetect]);
 
   useEffect(() => { load(); const t = setInterval(load, 3000); return () => clearInterval(t); }, [load]);
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
@@ -470,8 +488,134 @@ export default function Covas() {
     setInterimText('');
   }, [stopLevelMeter]);
 
+  /* ── Boom Detection (mic mute/unmute monitoring) ─────────────── */
+
+  const stopBoomDetect = useCallback(() => {
+    if (boomIntervalRef.current) { clearInterval(boomIntervalRef.current); boomIntervalRef.current = null; }
+    if (boomAudioCtxRef.current) { boomAudioCtxRef.current.close(); boomAudioCtxRef.current = null; }
+    if (boomStreamRef.current) { boomStreamRef.current.getTracks().forEach(t => t.stop()); boomStreamRef.current = null; }
+    boomAnalyserRef.current = null;
+    boomSilenceCountRef.current = 0;
+    boomActiveCountRef.current = 0;
+    setBoomState('unknown');
+  }, []);
+
+  const startBoomDetect = useCallback(async () => {
+    stopBoomDetect();
+
+    try {
+      const audioConstraints: MediaTrackConstraints = selectedInput
+        ? { deviceId: { exact: selectedInput }, echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+        : { echoCancellation: false, noiseSuppression: false, autoGainControl: false };
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints });
+      boomStreamRef.current = stream;
+
+      // Try track mute events (works on some headsets)
+      const track = stream.getAudioTracks()[0];
+      if (track) {
+        track.onmute = () => {
+          console.log('[COVAS] Boom detect: track muted (boom up)');
+          setBoomState('up');
+          if (listeningRef.current) {
+            stopListening();
+          }
+        };
+        track.onunmute = () => {
+          console.log('[COVAS] Boom detect: track unmuted (boom down)');
+          setBoomState('down');
+          if (boomDetectRef.current && !listeningRef.current) {
+            startListening();
+          }
+        };
+      }
+
+      // RMS-based fallback: monitor audio level to detect hardware mute
+      const ctx = new AudioContext();
+      boomAudioCtxRef.current = ctx;
+      const source = ctx.createMediaStreamSource(stream);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 512;
+      analyser.smoothingTimeConstant = 0.1;
+      source.connect(analyser);
+      boomAnalyserRef.current = analyser;
+
+      const dataArray = new Float32Array(analyser.fftSize);
+      // Thresholds: 10 consecutive silent checks (~500ms) = boom up
+      //             3 consecutive active checks (~150ms) = boom down
+      const SILENCE_THRESHOLD = 10;
+      const ACTIVE_THRESHOLD = 3;
+      const RMS_FLOOR = 0.0005; // Below this = true silence (hardware muted)
+
+      boomIntervalRef.current = window.setInterval(() => {
+        if (!boomAnalyserRef.current) return;
+        boomAnalyserRef.current.getFloatTimeDomainData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) sum += dataArray[i] * dataArray[i];
+        const rms = Math.sqrt(sum / dataArray.length);
+
+        if (rms < RMS_FLOOR) {
+          // Silence detected
+          boomActiveCountRef.current = 0;
+          boomSilenceCountRef.current++;
+          if (boomSilenceCountRef.current >= SILENCE_THRESHOLD) {
+            // Sustained silence → boom is up (muted)
+            setBoomState((prev) => {
+              if (prev !== 'up') {
+                console.log('[COVAS] Boom detect: sustained silence — boom up');
+                if (listeningRef.current) {
+                  stopListening();
+                }
+              }
+              return 'up';
+            });
+          }
+        } else {
+          // Audio detected
+          boomSilenceCountRef.current = 0;
+          boomActiveCountRef.current++;
+          if (boomActiveCountRef.current >= ACTIVE_THRESHOLD) {
+            // Sustained audio → boom is down (unmuted)
+            setBoomState((prev) => {
+              if (prev !== 'down') {
+                console.log('[COVAS] Boom detect: audio detected — boom down');
+                if (boomDetectRef.current && !listeningRef.current) {
+                  startListening();
+                }
+              }
+              return 'down';
+            });
+          }
+        }
+      }, 50);
+
+      console.log('[COVAS] Boom detection started');
+    } catch (err) {
+      console.warn('[COVAS] Failed to start boom detection:', err);
+      setMicError('Failed to start boom detection. Check microphone permissions.');
+    }
+  }, [selectedInput, stopBoomDetect, startListening, stopListening]);
+
+  // Start/stop boom detection when toggle changes
+  useEffect(() => {
+    if (boomDetect) {
+      startBoomDetect();
+    } else {
+      stopBoomDetect();
+    }
+    return () => { stopBoomDetect(); };
+  }, [boomDetect]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Restart boom detection when input device changes
+  useEffect(() => {
+    if (boomDetect) {
+      stopBoomDetect();
+      const t = setTimeout(() => startBoomDetect(), 300);
+      return () => clearTimeout(t);
+    }
+  }, [selectedInput]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Cleanup on unmount
-  useEffect(() => { return () => { stopListening(); window.speechSynthesis?.cancel(); }; }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { return () => { stopListening(); stopBoomDetect(); window.speechSynthesis?.cancel(); }; }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Restart listening when device changes
   useEffect(() => {
@@ -614,6 +758,58 @@ export default function Covas() {
               {interimText}...
             </div>
           )}
+
+          {/* Boom Detection Toggle */}
+          <div style={{
+            marginBottom: 12, padding: 10, borderRadius: 4,
+            background: boomDetect ? 'rgba(212,160,23,0.08)' : 'var(--color-bg-tertiary)',
+            border: `1px solid ${boomDetect ? 'rgba(212,160,23,0.3)' : 'var(--color-border)'}`,
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <div>
+                <div style={{
+                  fontSize: 12, fontFamily: 'var(--font-display)', letterSpacing: 1,
+                  color: boomDetect ? '#D4A017' : 'var(--color-text-muted)',
+                }}>
+                  BOOM DETECTION
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 2 }}>
+                  {boomDetect
+                    ? boomState === 'down' ? 'Boom down — mic active'
+                    : boomState === 'up' ? 'Boom up — mic muted'
+                    : 'Monitoring mic state...'
+                    : 'Auto-toggle mic when headset boom is lowered/raised'}
+                </div>
+              </div>
+              <button
+                onClick={() => setBoomDetect(!boomDetect)}
+                style={{
+                  padding: '5px 12px', fontSize: 11, fontFamily: 'var(--font-display)', letterSpacing: 1,
+                  background: boomDetect ? 'rgba(212,160,23,0.2)' : 'rgba(255,255,255,0.05)',
+                  border: `1px solid ${boomDetect ? '#D4A017' : 'var(--color-border)'}`,
+                  color: boomDetect ? '#D4A017' : 'var(--color-text-muted)',
+                  borderRadius: 3, cursor: 'pointer', transition: 'all 0.2s',
+                }}
+              >
+                {boomDetect ? 'ON' : 'OFF'}
+              </button>
+            </div>
+            {boomDetect && (
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 6, marginTop: 6,
+              }}>
+                <span style={{
+                  width: 8, height: 8, borderRadius: '50%',
+                  background: boomState === 'down' ? '#4e9a3e' : boomState === 'up' ? '#ff4444' : '#888',
+                  display: 'inline-block',
+                  boxShadow: boomState === 'down' ? '0 0 6px #4e9a3e' : boomState === 'up' ? '0 0 6px #ff4444' : 'none',
+                }} />
+                <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>
+                  {boomState === 'down' ? 'ACTIVE' : boomState === 'up' ? 'MUTED' : 'DETECTING...'}
+                </span>
+              </div>
+            )}
+          </div>
 
           {/* COVAS pipeline state */}
           <div style={{ fontSize: 14, lineHeight: 1.8, borderTop: '1px solid var(--color-border)', paddingTop: 8 }}>
