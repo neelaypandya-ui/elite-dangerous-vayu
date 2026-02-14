@@ -171,6 +171,170 @@ const macros: Record<string, ActionMacro> = {
     ],
     responseTemplate: 'Engaging supercruise.',
   },
+
+  silent_running: {
+    name: 'silent_running',
+    description: 'Activate silent running',
+    steps: [
+      {
+        action: 'ToggleButtonUpInput',
+        condition: (s) => !s.ship.silentRunning,
+      },
+    ],
+    responseTemplate: 'Silent running activated. Heat signature minimised.',
+  },
+
+  silent_running_off: {
+    name: 'silent_running_off',
+    description: 'Deactivate silent running',
+    steps: [
+      {
+        action: 'ToggleButtonUpInput',
+        condition: (s) => s.ship.silentRunning,
+      },
+    ],
+    responseTemplate: 'Silent running deactivated. Resuming normal operations.',
+  },
+
+  evasive: {
+    name: 'evasive',
+    description: 'Deploy chaff, boost engines, and divert power to systems',
+    steps: [
+      {
+        action: 'FireChaffLauncher',
+      },
+      {
+        action: 'IncreaseSystemsPower',
+        delayAfterMs: 50,
+      },
+      {
+        action: 'IncreaseSystemsPower',
+        delayAfterMs: 50,
+      },
+      {
+        action: 'IncreaseSystemsPower',
+        delayAfterMs: 50,
+      },
+      {
+        action: 'IncreaseSystemsPower',
+        delayAfterMs: 100,
+      },
+      {
+        action: 'UseBoostJuice',
+      },
+    ],
+    responseTemplate: 'Evasive manoeuvres! Chaff deployed, pips to systems, boosting.',
+  },
+
+  night_vision: {
+    name: 'night_vision',
+    description: 'Toggle night vision',
+    steps: [
+      {
+        action: 'NightVisionToggle',
+      },
+    ],
+    responseTemplate: 'Night vision toggled.',
+  },
+
+  lights_toggle: {
+    name: 'lights_toggle',
+    description: 'Toggle ship lights',
+    steps: [
+      {
+        action: 'ShipSpotLightToggle',
+      },
+    ],
+    responseTemplate: 'Ship lights toggled.',
+  },
+
+  scan_mode: {
+    name: 'scan_mode',
+    description: 'Enter Full Spectrum Scanner mode',
+    steps: [
+      {
+        action: 'ExplorationFSSEnter',
+      },
+    ],
+    responseTemplate: 'Entering Full Spectrum Scanner.',
+  },
+
+  galaxy_map: {
+    name: 'galaxy_map',
+    description: 'Open the galaxy map',
+    steps: [
+      {
+        action: 'GalaxyMapOpen',
+      },
+    ],
+    responseTemplate: 'Opening galaxy map.',
+  },
+
+  system_map: {
+    name: 'system_map',
+    description: 'Open the system map',
+    steps: [
+      {
+        action: 'SystemMapOpen',
+      },
+    ],
+    responseTemplate: 'Opening system map.',
+  },
+
+  photo_camera: {
+    name: 'photo_camera',
+    description: 'Toggle the external camera suite',
+    steps: [
+      {
+        action: 'PhotoCameraToggle',
+      },
+    ],
+    responseTemplate: 'Camera suite activated. Strike a pose, Commander.',
+  },
+
+  boost: {
+    name: 'boost',
+    description: 'Engage engine boost',
+    steps: [
+      {
+        action: 'UseBoostJuice',
+      },
+    ],
+    responseTemplate: 'Boosting!',
+  },
+
+  chaff: {
+    name: 'chaff',
+    description: 'Deploy chaff launcher',
+    steps: [
+      {
+        action: 'FireChaffLauncher',
+      },
+    ],
+    responseTemplate: 'Chaff deployed.',
+  },
+
+  heatsink: {
+    name: 'heatsink',
+    description: 'Deploy heat sink',
+    steps: [
+      {
+        action: 'DeployHeatSink',
+      },
+    ],
+    responseTemplate: 'Heat sink deployed.',
+  },
+
+  shield_cell: {
+    name: 'shield_cell',
+    description: 'Fire shield cell bank',
+    steps: [
+      {
+        action: 'UseShieldCell',
+      },
+    ],
+    responseTemplate: 'Shield cell bank activated.',
+  },
 };
 
 // ---------------------------------------------------------------------------

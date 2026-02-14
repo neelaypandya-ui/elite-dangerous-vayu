@@ -171,6 +171,71 @@ const handlers: Record<string, CommandHandler> = {
     return { success: result.success, response: '', data: { macro: 'supercruise', ...result } };
   },
 
+  action_silent_running: async () => {
+    const result = await actionEngine.executeMacro('silent_running');
+    return { success: result.success, response: '', data: { macro: 'silent_running', ...result } };
+  },
+
+  action_silent_running_off: async () => {
+    const result = await actionEngine.executeMacro('silent_running_off');
+    return { success: result.success, response: '', data: { macro: 'silent_running_off', ...result } };
+  },
+
+  action_evasive: async () => {
+    const result = await actionEngine.executeMacro('evasive');
+    return { success: result.success, response: '', data: { macro: 'evasive', ...result } };
+  },
+
+  action_night_vision: async () => {
+    const result = await actionEngine.executeMacro('night_vision');
+    return { success: result.success, response: '', data: { macro: 'night_vision', ...result } };
+  },
+
+  action_lights_toggle: async () => {
+    const result = await actionEngine.executeMacro('lights_toggle');
+    return { success: result.success, response: '', data: { macro: 'lights_toggle', ...result } };
+  },
+
+  action_scan_mode: async () => {
+    const result = await actionEngine.executeMacro('scan_mode');
+    return { success: result.success, response: '', data: { macro: 'scan_mode', ...result } };
+  },
+
+  action_galaxy_map: async () => {
+    const result = await actionEngine.executeMacro('galaxy_map');
+    return { success: result.success, response: '', data: { macro: 'galaxy_map', ...result } };
+  },
+
+  action_system_map: async () => {
+    const result = await actionEngine.executeMacro('system_map');
+    return { success: result.success, response: '', data: { macro: 'system_map', ...result } };
+  },
+
+  action_photo_camera: async () => {
+    const result = await actionEngine.executeMacro('photo_camera');
+    return { success: result.success, response: '', data: { macro: 'photo_camera', ...result } };
+  },
+
+  action_boost: async () => {
+    const result = await actionEngine.executeMacro('boost');
+    return { success: result.success, response: '', data: { macro: 'boost', ...result } };
+  },
+
+  action_chaff: async () => {
+    const result = await actionEngine.executeMacro('chaff');
+    return { success: result.success, response: '', data: { macro: 'chaff', ...result } };
+  },
+
+  action_heatsink: async () => {
+    const result = await actionEngine.executeMacro('heatsink');
+    return { success: result.success, response: '', data: { macro: 'heatsink', ...result } };
+  },
+
+  action_shield_cell: async () => {
+    const result = await actionEngine.executeMacro('shield_cell');
+    return { success: result.success, response: '', data: { macro: 'shield_cell', ...result } };
+  },
+
   search_commodity_buy: async (entities) => {
     const commodity = entities['commodity'] as string;
     if (!commodity) return { success: false, response: 'Which commodity are you looking to buy?' };

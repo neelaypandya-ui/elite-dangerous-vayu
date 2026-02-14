@@ -53,17 +53,22 @@ covasRouter.post('/audio', async (req: Request, res: Response) => {
 
 /** GET /api/covas/state — Get current COVAS state. */
 covasRouter.get('/state', (_req: Request, res: Response) => {
-  const tts = getTTSService();
-  res.json({
-    success: true,
-    data: {
-      stage: covasPipeline.getStage(),
-      enabled: covasPipeline.isEnabled(),
-      ptt: pttManager.getState(),
-      availableCommands: commandExecutor.getAvailableCommands(),
-      ttsProvider: (tts as any).constructor?.name === 'FallbackTTS' ? 'none' : (tts as any).constructor?.name === 'ElevenLabsTTS' ? 'elevenlabs' : 'piper',
-    },
-  });
+  try {
+    const tts = getTTSService();
+    res.json({
+      success: true,
+      data: {
+        stage: covasPipeline.getStage(),
+        enabled: covasPipeline.isEnabled(),
+        ptt: pttManager.getState(),
+        availableCommands: commandExecutor.getAvailableCommands(),
+        ttsProvider: (tts as any).constructor?.name === 'FallbackTTS' ? 'none' : (tts as any).constructor?.name === 'ElevenLabsTTS' ? 'elevenlabs' : 'piper',
+      },
+    });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ success: false, error: msg });
+  }
 });
 
 /** POST /api/covas/enable — Enable/disable COVAS. */

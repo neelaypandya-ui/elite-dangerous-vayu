@@ -22,6 +22,23 @@ import { journalWatcher, statusWatcher, companionWatcher } from './core/index.js
 import './core/game-state.js'; // registers event handlers on import
 
 // ---------------------------------------------------------------------------
+// Global error handlers — catch unhandled errors to prevent silent crashes
+// ---------------------------------------------------------------------------
+
+process.on('unhandledRejection', (reason: unknown) => {
+  console.error('[KAVACH] Unhandled promise rejection:', reason);
+  // Do NOT exit — log and continue. The rejection is already lost,
+  // but crashing would be worse for a companion app.
+});
+
+process.on('uncaughtException', (err: Error) => {
+  console.error('[KAVACH] Uncaught exception:', err);
+  // For truly unexpected errors we log but stay alive.
+  // The global Express error handler catches route-level throws;
+  // this catches everything else (timers, event emitters, etc.).
+});
+
+// ---------------------------------------------------------------------------
 // Bootstrap
 // ---------------------------------------------------------------------------
 
@@ -42,6 +59,20 @@ async function main(): Promise<void> {
   // -- HTTP server --
   const server = app.listen(config.server.port, () => {
     console.log(`[http] Server listening on http://localhost:${config.server.port}`);
+  });
+
+  // Handle EADDRINUSE — another process (or a previous VAYU instance) is
+  // already using this port. Log a helpful message instead of crashing with
+  // an unreadable stack trace.
+  server.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n[KAVACH] Port ${config.server.port} is already in use.`);
+      console.error('  Another VAYU instance may be running, or another application is using this port.');
+      console.error(`  Either stop the other process or change SERVER_PORT in your .env file.\n`);
+      process.exit(1);
+    }
+    // Re-throw other listen errors so they are not silently swallowed
+    throw err;
   });
 
   // -- WebSocket --

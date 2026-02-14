@@ -15,19 +15,27 @@ graphicsRouter.get('/', (_req: Request, res: Response) => {
 });
 
 graphicsRouter.get('/current', (_req: Request, res: Response) => {
-  const xml = graphicsService.readCurrentOverride();
-  res.json({ success: true, data: { xml, activeProfile: graphicsService.getActiveProfile() } });
+  try {
+    const xml = graphicsService.readCurrentOverride();
+    res.json({ success: true, data: { xml, activeProfile: graphicsService.getActiveProfile() } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error instanceof Error ? error.message : 'Failed to read graphics override' });
+  }
 });
 
 graphicsRouter.post('/apply', (req: Request, res: Response) => {
   const { profileName } = req.body;
-  if (!profileName) {
-    res.status(400).json({ success: false, error: 'Missing profileName' });
+  if (!profileName || typeof profileName !== 'string') {
+    res.status(400).json({ success: false, error: 'Missing or invalid profileName' });
     return;
   }
-  const result = graphicsService.applyProfile(profileName);
-  if (result.success) res.json({ success: true, data: { applied: profileName } });
-  else res.status(400).json({ success: false, error: result.error });
+  try {
+    const result = graphicsService.applyProfile(profileName);
+    if (result.success) res.json({ success: true, data: { applied: profileName } });
+    else res.status(400).json({ success: false, error: result.error });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error instanceof Error ? error.message : 'Failed to apply profile' });
+  }
 });
 
 graphicsRouter.post('/profiles', (req: Request, res: Response) => {

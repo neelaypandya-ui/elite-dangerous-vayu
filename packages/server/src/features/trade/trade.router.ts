@@ -18,6 +18,10 @@ tradeRouter.get('/current', (_req: Request, res: Response) => {
 tradeRouter.get('/search', async (req: Request, res: Response) => {
   try {
     const commodity = (req.query.commodity as string) || '';
+    if (!commodity.trim()) {
+      res.status(400).json({ success: false, error: 'Missing commodity query parameter' });
+      return;
+    }
     const prices = await tradeService.searchCommodityPrices(commodity);
     res.json({ success: true, data: { commodity, prices } });
   } catch (error) {

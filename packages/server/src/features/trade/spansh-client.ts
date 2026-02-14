@@ -38,7 +38,9 @@ async function loadCommodityNames(): Promise<Map<string, string>> {
     return commodityNameCache;
   }
 
-  const resp = await fetch(`${SPANSH_BASE}/stations/field_values/market`);
+  const resp = await fetch(`${SPANSH_BASE}/stations/field_values/market`, {
+    signal: AbortSignal.timeout(15000),
+  });
   if (!resp.ok) throw new Error(`Spansh field_values failed: ${resp.status}`);
   const data: any = await resp.json();
   const names: string[] = data.values || [];
@@ -166,6 +168,7 @@ export async function searchBestSellPrice(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(20000),
   });
 
   if (!resp.ok) {
@@ -238,6 +241,7 @@ export async function searchBestBuyPrice(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(20000),
   });
 
   if (!resp.ok) {

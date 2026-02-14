@@ -151,6 +151,8 @@ function createDefaultShip(): ShipState {
     fsdCharging: false,
     fsdCooldown: false,
     fsdMassLocked: false,
+    silentRunning: false,
+    nightVision: false,
   };
 }
 
@@ -1926,6 +1928,8 @@ class GameStateManager {
       ship.fsdMassLocked      = (flags & 0x00010000) !== 0;  // bit 16
       ship.fsdCharging        = (flags & 0x00020000) !== 0;  // bit 17
       ship.fsdCooldown        = (flags & 0x00040000) !== 0;  // bit 18
+      ship.silentRunning      = (flags & 0x00001000) !== 0;  // bit 12
+      ship.nightVision        = (flags & 0x10000000) !== 0;  // bit 28
 
       // Odyssey flags (Flags2)
       loc.onFoot = (flags2 & 0x00000001) !== 0;

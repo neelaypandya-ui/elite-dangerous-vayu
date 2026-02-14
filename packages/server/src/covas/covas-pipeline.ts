@@ -59,30 +59,58 @@ class CovasPipeline {
   async processAudio(audioBuffer: Buffer, format = 'wav'): Promise<PipelineResult> {
     const totalStart = Date.now();
 
-    // STT
-    this.setStage(CovasPipelineStage.Transcribing);
-    const sttStart = Date.now();
-    const sttResult = await sttService.transcribe(audioBuffer, format);
-    const sttLatency = Date.now() - sttStart;
+    try {
+      // STT
+      this.setStage(CovasPipelineStage.Transcribing);
+      const sttStart = Date.now();
+      const sttResult = await sttService.transcribe(audioBuffer, format);
+      const sttLatency = Date.now() - sttStart;
 
-    if (!sttResult.text.trim()) {
+      if (!sttResult.text.trim()) {
+        this.setStage(CovasPipelineStage.Idle);
+        return {
+          inputText: '',
+          responseText: 'I didn\'t catch that. Could you repeat?',
+          intent: null,
+          commandResult: null,
+          audioBase64: null,
+          latency: { stt: sttLatency, llm: 0, command: null, tts: null, total: Date.now() - totalStart },
+        };
+      }
+
+      return await this.processText(sttResult.text, sttLatency, totalStart);
+    } catch (err) {
+      console.error('[COVAS/Pipeline] processAudio error:', err);
       this.setStage(CovasPipelineStage.Idle);
+      const msg = err instanceof Error ? err.message : 'Unknown pipeline error';
       return {
         inputText: '',
-        responseText: 'I didn\'t catch that. Could you repeat?',
+        responseText: `Voice processing failed: ${msg}`,
         intent: null,
         commandResult: null,
         audioBase64: null,
-        latency: { stt: sttLatency, llm: 0, command: null, tts: null, total: Date.now() - totalStart },
+        latency: { stt: null, llm: 0, command: null, tts: null, total: Date.now() - totalStart },
       };
     }
-
-    return this.processText(sttResult.text, sttLatency, totalStart);
   }
 
   /** Process text input (typed command). */
   async processTextInput(text: string): Promise<PipelineResult> {
-    return this.processText(text, null, Date.now());
+    try {
+      return await this.processText(text, null, Date.now());
+    } catch (err) {
+      console.error('[COVAS/Pipeline] processTextInput error:', err);
+      this.setStage(CovasPipelineStage.Idle);
+      const msg = err instanceof Error ? err.message : 'Unknown pipeline error';
+      return {
+        inputText: text,
+        responseText: `Command processing failed: ${msg}`,
+        intent: null,
+        commandResult: null,
+        audioBase64: null,
+        latency: { stt: null, llm: 0, command: null, tts: null, total: 0 },
+      };
+    }
   }
 
   private async processText(text: string, sttLatency: number | null, totalStart: number): Promise<PipelineResult> {

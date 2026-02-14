@@ -26,6 +26,12 @@ triviaRouter.post('/start', (req: Request, res: Response) => {
 
 triviaRouter.post('/answer', (req: Request, res: Response) => {
   const { questionId, selectedIndex, timeMs } = req.body;
+  if (!questionId || typeof questionId !== 'string') {
+    res.status(400).json({ success: false, error: 'Missing or invalid questionId' }); return;
+  }
+  if (typeof selectedIndex !== 'number' || selectedIndex < 0) {
+    res.status(400).json({ success: false, error: 'Missing or invalid selectedIndex' }); return;
+  }
   const result = triviaService.submitAnswer(questionId, selectedIndex, timeMs || 0);
   if (!result) { res.status(400).json({ success: false, error: 'No active quiz or invalid question' }); return; }
   res.json({ success: true, data: result });

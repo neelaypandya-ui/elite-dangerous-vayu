@@ -61,6 +61,19 @@ When the user gives a command (slang or direct) that implies a ship action, incl
 - Close cargo scoop: <intent>action_close_cargo_scoop</intent>
 - Prepare for docking: <intent>action_dock_prepare</intent>
 - Enter supercruise: <intent>action_supercruise</intent>
+- Silent running on: <intent>action_silent_running</intent>
+- Silent running off: <intent>action_silent_running_off</intent>
+- Evasive manoeuvres (chaff + boost + pips to SYS): <intent>action_evasive</intent>
+- Toggle night vision: <intent>action_night_vision</intent>
+- Toggle ship lights: <intent>action_lights_toggle</intent>
+- Enter FSS scanner: <intent>action_scan_mode</intent>
+- Open galaxy map: <intent>action_galaxy_map</intent>
+- Open system map: <intent>action_system_map</intent>
+- Open camera suite: <intent>action_photo_camera</intent>
+- Boost engines: <intent>action_boost</intent>
+- Deploy chaff: <intent>action_chaff</intent>
+- Deploy heat sink: <intent>action_heatsink</intent>
+- Fire shield cell bank: <intent>action_shield_cell</intent>
 
 Examples:
 - "time to kick some ass" → <intent>action_combat_ready</intent> with an enthusiastic combat response
@@ -68,6 +81,14 @@ Examples:
 - "let's bounce" → <intent>action_flee</intent> with a casual acknowledgment
 - "weapons away" → <intent>action_retract_weapons</intent>
 - "prepare for landing" → <intent>action_dock_prepare</intent>
+- "go dark" → <intent>action_silent_running</intent> with a stealthy acknowledgment
+- "evasive manoeuvres" → <intent>action_evasive</intent> with an urgent response
+- "lights on" → <intent>action_lights_toggle</intent>
+- "scan the system" → <intent>action_scan_mode</intent>
+- "hit the afterburners" → <intent>action_boost</intent>
+- "pop chaff" → <intent>action_chaff</intent>
+- "dump heat" → <intent>action_heatsink</intent>
+- "shields failing, cell" → <intent>action_shield_cell</intent>
 
 Match the commander's energy. If they're hyped for combat, be hyped back. If they want to flee, be urgent. Respond naturally — the system will execute the actual keypresses.`;
 }
@@ -196,6 +217,19 @@ class LLMService {
       [/\b(close\s*(cargo\s*)?scoop|retract\s*scoop|scoop\s*in|secure\s*scoop)\b/, 'action_close_cargo_scoop'],
       [/\b(prepare\s*(for\s*)?dock|docking\s*prep|coming\s*in\s*to\s*land)\b/, 'action_dock_prepare'],
       [/\b(supercruise|punch\s*it|cruise)\b/, 'action_supercruise'],
+      [/\b(go\s*dark|go\s*silent|silent\s*running\s*(on|activate|engage)?|run\s*silent|stealth\s*mode|cloak)\b/, 'action_silent_running'],
+      [/\b(silent\s*running\s*(off|deactivate|disengage|disable)|drop\s*silent|uncloak|go\s*loud)\b/, 'action_silent_running_off'],
+      [/\b(evasive|evasive\s*manoe?uvres?|evade|jink|dodge|break\s*away)\b/, 'action_evasive'],
+      [/\b(night\s*vision|nv\s*(on|off|toggle)?|dark\s*sight)\b/, 'action_night_vision'],
+      [/\b(lights?\s*(on|off|toggle)|ship\s*lights?|headlights?|spot\s*lights?)\b/, 'action_lights_toggle'],
+      [/\b(scan\s*(mode|the\s*system)?|fss|full\s*spectrum|enter\s*scanner)\b/, 'action_scan_mode'],
+      [/\b(galaxy\s*map|gal\s*map|open\s*galaxy)\b/, 'action_galaxy_map'],
+      [/\b(system\s*map|sys\s*map|open\s*system)\b/, 'action_system_map'],
+      [/\b(camera\s*(suite|mode)?|photo\s*(mode|camera)|selfie|screenshot|take\s*a?\s*pic(ture)?)\b/, 'action_photo_camera'],
+      [/\b(boost|afterburner|hit\s*the\s*burners?|floor\s*it|full\s*throttle\s*boost)\b/, 'action_boost'],
+      [/\b(chaff|pop\s*chaff|deploy\s*chaff|drop\s*chaff|launch\s*chaff)\b/, 'action_chaff'],
+      [/\b(heat\s*sink|dump\s*heat|deploy\s*heat\s*sink|drop\s*a?\s*sink|cool\s*down)\b/, 'action_heatsink'],
+      [/\b(shield\s*cell|fire\s*cell|scb|cell\s*bank|bank\s*cell|pop\s*cell)\b/, 'action_shield_cell'],
     ];
     for (const [pattern, intent] of actionPatterns) {
       if (pattern.test(lower)) return { intent, entities };

@@ -184,6 +184,10 @@ export interface ShipState {
   fsdCooldown: boolean;
   /** Whether the FSD is mass-locked by a nearby body. */
   fsdMassLocked: boolean;
+  /** Whether silent running is currently active. */
+  silentRunning: boolean;
+  /** Whether night vision is currently active. */
+  nightVision: boolean;
 }
 
 // ---------------------------------------------------------------------------

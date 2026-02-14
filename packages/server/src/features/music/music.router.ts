@@ -45,7 +45,7 @@ musicRouter.get('/stream/:id', async (req: Request, res: Response) => {
     if (!audioUrl) throw new Error('No audio URL resolved');
 
     // Proxy the CDN stream (preserves Content-Type, Content-Length, avoids CORS)
-    const upstream = await fetch(audioUrl);
+    const upstream = await fetch(audioUrl, { signal: AbortSignal.timeout(15000) });
     if (!upstream.ok || !upstream.body) {
       res.status(502).json({ success: false, error: 'Upstream audio fetch failed' });
       return;
@@ -85,6 +85,7 @@ musicRouter.post('/queue', (req: Request, res: Response) => {
 
 musicRouter.delete('/queue/:index', (req: Request, res: Response) => {
   const idx = parseInt(req.params.index);
+  if (isNaN(idx) || idx < 0) { res.status(400).json({ success: false, error: 'Invalid queue index — must be a non-negative integer' }); return; }
   if (musicService.removeFromQueue(idx)) {
     res.json({ success: true, data: musicService.getState() });
   } else {
@@ -119,7 +120,8 @@ musicRouter.post('/previous', (_req: Request, res: Response) => {
 
 musicRouter.post('/volume', (req: Request, res: Response) => {
   const { volume } = req.body;
-  musicService.setVolume(volume ?? 80);
+  const vol = typeof volume === 'number' ? volume : 80;
+  musicService.setVolume(Math.max(0, Math.min(100, vol)));
   res.json({ success: true, data: musicService.getState() });
 });
 

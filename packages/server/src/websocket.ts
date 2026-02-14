@@ -142,7 +142,11 @@ class WebSocketManager {
       // If the client has subscriptions, only send matching events
       if (info.subscriptions.size > 0 && !info.subscriptions.has(type)) continue;
 
-      ws.send(message);
+      try {
+        ws.send(message);
+      } catch {
+        // Socket may have closed between readyState check and send — safe to ignore
+      }
     }
   }
 
@@ -156,7 +160,11 @@ class WebSocketManager {
       timestamp: new Date().toISOString(),
       sequence: this.sequence++,
     };
-    ws.send(JSON.stringify(envelope));
+    try {
+      ws.send(JSON.stringify(envelope));
+    } catch {
+      // Socket may have closed between readyState check and send — safe to ignore
+    }
   }
 
   /** Number of currently connected clients. */
