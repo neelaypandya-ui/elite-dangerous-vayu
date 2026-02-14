@@ -11,8 +11,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockKeybd_event = vi.fn();
-const mockGetAll = vi.fn();
+const { mockKeybd_event, mockGetAll } = vi.hoisted(() => ({
+  mockKeybd_event: vi.fn(),
+  mockGetAll: vi.fn(),
+}));
 
 vi.mock('koffi', () => ({
   default: {

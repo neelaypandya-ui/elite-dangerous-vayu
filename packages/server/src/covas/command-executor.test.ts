@@ -11,11 +11,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockGetState = vi.fn();
-const mockExecuteMacro = vi.fn();
-const mockFindBestSellPrice = vi.fn();
-const mockFindBestBuyPrice = vi.fn();
-const mockResolveCommodity = vi.fn();
+const { mockGetState, mockExecuteMacro, mockFindBestSellPrice, mockFindBestBuyPrice, mockResolveCommodity } = vi.hoisted(() => ({
+  mockGetState: vi.fn(),
+  mockExecuteMacro: vi.fn(),
+  mockFindBestSellPrice: vi.fn(),
+  mockFindBestBuyPrice: vi.fn(),
+  mockResolveCommodity: vi.fn(),
+}));
 
 vi.mock('../core/game-state.js', () => ({
   gameStateManager: { getState: mockGetState },

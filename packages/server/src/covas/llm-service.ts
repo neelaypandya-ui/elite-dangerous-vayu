@@ -215,7 +215,7 @@ class LLMService {
       [/\b(landing\s*gear\s*up|gear\s*up|retract\s*(landing\s*)?gear|wheels?\s*up)\b/, 'action_retract_landing_gear'],
       [/\b(open\s*(cargo\s*)?scoop|deploy\s*scoop|scoop\s*out)\b/, 'action_open_cargo_scoop'],
       [/\b(close\s*(cargo\s*)?scoop|retract\s*scoop|scoop\s*in|secure\s*scoop)\b/, 'action_close_cargo_scoop'],
-      [/\b(prepare\s*(for\s*)?dock|docking\s*prep|coming\s*in\s*to\s*land)\b/, 'action_dock_prepare'],
+      [/\b(prepare\s*(for\s*)?dock(ing)?|docking\s*prep|coming\s*in\s*to\s*land)\b/, 'action_dock_prepare'],
       [/\b(supercruise|punch\s*it|cruise)\b/, 'action_supercruise'],
       [/\b(go\s*dark|go\s*silent|silent\s*running\s*(on|activate|engage)?|run\s*silent|stealth\s*mode|cloak)\b/, 'action_silent_running'],
       [/\b(silent\s*running\s*(off|deactivate|disengage|disable)|drop\s*silent|uncloak|go\s*loud)\b/, 'action_silent_running_off'],

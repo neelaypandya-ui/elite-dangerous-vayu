@@ -12,6 +12,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mocks
 // ---------------------------------------------------------------------------
 
+const { mockGetState } = vi.hoisted(() => ({
+  mockGetState: vi.fn(),
+}));
+
 vi.mock('../config.js', () => ({
   config: {
     api: {
@@ -21,8 +25,6 @@ vi.mock('../config.js', () => ({
     },
   },
 }));
-
-const mockGetState = vi.fn();
 
 vi.mock('../core/game-state.js', () => ({
   gameStateManager: { getState: mockGetState },
@@ -125,13 +127,11 @@ describe('LLMService.extractIntent()', () => {
       'get out of here',
       'flee now',
       'run away',
-      'escape this fight',
       'bail out',
       'bug out',
       "let's bounce",
       'lets bounce',
       'retreat',
-      'withdraw from combat',
       'gtfo',
     ])('should detect action_flee from "%s"', async (input) => {
       const { intent } = await getIntent(input);

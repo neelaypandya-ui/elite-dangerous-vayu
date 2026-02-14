@@ -302,7 +302,7 @@ describe('formatDate()', () => {
   });
 
   it('should accept ISO string input', () => {
-    const result = formatDate('2024-01-01T00:00:00Z');
+    const result = formatDate('2024-06-15T12:00:00Z');
     expect(result).toContain('2024');
     expect(result).not.toBe('Invalid Date');
   });

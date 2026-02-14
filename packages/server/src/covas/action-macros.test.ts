@@ -11,8 +11,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mocks — must be set up before importing the module under test
 // ---------------------------------------------------------------------------
 
-const mockGetState = vi.fn();
-const mockSendAction = vi.fn();
+const { mockGetState, mockSendAction } = vi.hoisted(() => ({
+  mockGetState: vi.fn(),
+  mockSendAction: vi.fn(),
+}));
 
 vi.mock('../core/game-state.js', () => ({
   gameStateManager: { getState: mockGetState },
@@ -72,8 +74,8 @@ describe('ActionEngine', () => {
       expect(names).toContain('supercruise');
     });
 
-    it('should return exactly 9 macros', () => {
-      expect(actionEngine.getMacroNames()).toHaveLength(9);
+    it('should return exactly 22 macros', () => {
+      expect(actionEngine.getMacroNames()).toHaveLength(22);
     });
   });
 
