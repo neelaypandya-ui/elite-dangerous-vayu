@@ -9,6 +9,8 @@ graphicsRouter.get('/', (_req: Request, res: Response) => {
     data: {
       profiles: graphicsService.getProfiles(),
       activeProfile: graphicsService.getActiveProfile(),
+      qualityPresets: graphicsService.getQualityPresets(),
+      activeQualityPreset: graphicsService.getActiveQualityPreset(),
       overridePath: graphicsService.getOverridePath(),
     },
   });
@@ -35,6 +37,21 @@ graphicsRouter.post('/apply', (req: Request, res: Response) => {
     else res.status(400).json({ success: false, error: result.error });
   } catch (error) {
     res.status(500).json({ success: false, error: error instanceof Error ? error.message : 'Failed to apply profile' });
+  }
+});
+
+graphicsRouter.post('/apply-quality', (req: Request, res: Response) => {
+  const { presetName } = req.body;
+  if (!presetName || typeof presetName !== 'string') {
+    res.status(400).json({ success: false, error: 'Missing or invalid presetName' });
+    return;
+  }
+  try {
+    const result = graphicsService.applyQualityPreset(presetName);
+    if (result.success) res.json({ success: true, data: { applied: presetName } });
+    else res.status(400).json({ success: false, error: result.error });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error instanceof Error ? error.message : 'Failed to apply quality preset' });
   }
 });
 

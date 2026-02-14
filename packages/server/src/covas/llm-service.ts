@@ -70,6 +70,7 @@ When the user gives a command (slang or direct) that implies a ship action, incl
 - Open galaxy map: <intent>action_galaxy_map</intent>
 - Open system map: <intent>action_system_map</intent>
 - Open camera suite: <intent>action_photo_camera</intent>
+- Enter exploration/scenic mode: <intent>action_exploration_mode</intent>
 - Boost engines: <intent>action_boost</intent>
 - Deploy chaff: <intent>action_chaff</intent>
 - Deploy heat sink: <intent>action_heatsink</intent>
@@ -89,6 +90,10 @@ Examples:
 - "pop chaff" → <intent>action_chaff</intent>
 - "dump heat" → <intent>action_heatsink</intent>
 - "shields failing, cell" → <intent>action_shield_cell</intent>
+- "exploration mode" → <intent>action_exploration_mode</intent>
+- "scenic mode" → <intent>action_exploration_mode</intent>
+- "wow, look at that" → <intent>action_exploration_mode</intent>
+- "that's beautiful" → <intent>action_exploration_mode</intent>
 
 Match the commander's energy. If they're hyped for combat, be hyped back. If they want to flee, be urgent. Respond naturally — the system will execute the actual keypresses.`;
 }
@@ -230,6 +235,9 @@ class LLMService {
       [/\b(chaff|pop\s*chaff|deploy\s*chaff|drop\s*chaff|launch\s*chaff)\b/, 'action_chaff'],
       [/\b(heat\s*sink|dump\s*heat|deploy\s*heat\s*sink|drop\s*a?\s*sink|cool\s*down)\b/, 'action_heatsink'],
       [/\b(shield\s*cell|fire\s*cell|scb|cell\s*bank|bank\s*cell|pop\s*cell)\b/, 'action_shield_cell'],
+      [/\b(exploration\s*mode|scenic\s*mode|photo\s*quality|max\s*quality)\b/, 'action_exploration_mode'],
+      [/\b(that('?s| is)\s+(so\s+)?(beautiful|gorgeous|stunning|amazing|incredible))\b/, 'action_exploration_mode'],
+      [/\b(wow|whoa|oh\s*my\s*god|holy\s*(shit|crap|cow))\b/, 'action_exploration_mode'],
     ];
     for (const [pattern, intent] of actionPatterns) {
       if (pattern.test(lower)) return { intent, entities };

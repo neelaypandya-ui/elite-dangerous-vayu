@@ -9,6 +9,7 @@
 
 import { gameStateManager } from '../core/game-state.js';
 import { keypressService } from './keypress-service.js';
+import { graphicsService } from '../features/graphics/graphics.service.js';
 import type { GameState } from '@vayu/shared';
 
 // ---------------------------------------------------------------------------
@@ -16,12 +17,14 @@ import type { GameState } from '@vayu/shared';
 // ---------------------------------------------------------------------------
 
 interface ActionStep {
-  /** Elite Dangerous binding action name (e.g., "DeployHardpointToggle"). */
+  /** Elite Dangerous binding action name (e.g., "DeployHardpointToggle"). Empty string for side-effect-only steps. */
   action: string;
   /** Only execute this step if the condition returns true. */
   condition?: (state: GameState) => boolean;
   /** Milliseconds to wait after this step before the next. */
   delayAfterMs?: number;
+  /** Optional async function to run after the keypress (or instead if action is empty). */
+  sideEffect?: () => Promise<void>;
 }
 
 interface ActionMacro {
@@ -69,26 +72,34 @@ const macros: Record<string, ActionMacro> = {
 
   combat_ready: {
     name: 'combat_ready',
-    description: 'Deploy hardpoints for combat',
+    description: 'Deploy hardpoints for combat and switch to combat graphics',
     steps: [
       {
         action: 'DeployHardpointToggle',
         condition: (s) => !s.ship.hardpointsDeployed,
       },
+      {
+        action: '',
+        sideEffect: async () => { graphicsService.applyQualityPreset('Combat'); },
+      },
     ],
-    responseTemplate: 'Hardpoints deployed. Weapons hot, Commander.',
+    responseTemplate: 'Hardpoints deployed. Weapons hot, Commander. Combat graphics engaged.',
   },
 
   retract_weapons: {
     name: 'retract_weapons',
-    description: 'Retract hardpoints',
+    description: 'Retract hardpoints and switch to cruise graphics',
     steps: [
       {
         action: 'DeployHardpointToggle',
         condition: (s) => s.ship.hardpointsDeployed,
       },
+      {
+        action: '',
+        sideEffect: async () => { graphicsService.applyQualityPreset('Cruise'); },
+      },
     ],
-    responseTemplate: 'Hardpoints retracted.',
+    responseTemplate: 'Hardpoints retracted. Cruise graphics restored.',
   },
 
   deploy_landing_gear: {
@@ -335,6 +346,19 @@ const macros: Record<string, ActionMacro> = {
     ],
     responseTemplate: 'Shield cell bank activated.',
   },
+
+  exploration_mode: {
+    name: 'exploration_mode',
+    description: 'Switch to exploration graphics preset (max quality)',
+    steps: [
+      {
+        action: '',
+        condition: (s) => !s.ship.hardpointsDeployed,
+        sideEffect: async () => { graphicsService.applyQualityPreset('Exploration'); },
+      },
+    ],
+    responseTemplate: 'Exploration mode engaged. Maximum visual quality enabled.',
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -368,14 +392,27 @@ class ActionEngine {
         continue;
       }
 
-      // Send the keypress
-      const sent = await keypressService.sendAction(step.action);
-      if (sent) {
-        executed.push(step.action);
-        console.log(`[Action]   Sent "${step.action}"`);
-      } else {
-        console.warn(`[Action]   Failed to send "${step.action}" — binding not resolved`);
-        skipped.push(step.action);
+      // Send the keypress (skip if action is empty — side-effect-only step)
+      if (step.action) {
+        const sent = await keypressService.sendAction(step.action);
+        if (sent) {
+          executed.push(step.action);
+          console.log(`[Action]   Sent "${step.action}"`);
+        } else {
+          console.warn(`[Action]   Failed to send "${step.action}" — binding not resolved`);
+          skipped.push(step.action);
+        }
+      }
+
+      // Run side effect if present
+      if (step.sideEffect) {
+        try {
+          await step.sideEffect();
+          if (!step.action) executed.push('sideEffect');
+          console.log(`[Action]   Side effect executed`);
+        } catch (err) {
+          console.warn(`[Action]   Side effect failed:`, err);
+        }
       }
 
       // Delay between steps

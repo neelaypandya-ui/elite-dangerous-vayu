@@ -11,9 +11,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mocks — must be set up before importing the module under test
 // ---------------------------------------------------------------------------
 
-const { mockGetState, mockSendAction } = vi.hoisted(() => ({
+const { mockGetState, mockSendAction, mockApplyQualityPreset } = vi.hoisted(() => ({
   mockGetState: vi.fn(),
   mockSendAction: vi.fn(),
+  mockApplyQualityPreset: vi.fn(),
 }));
 
 vi.mock('../core/game-state.js', () => ({
@@ -22,6 +23,10 @@ vi.mock('../core/game-state.js', () => ({
 
 vi.mock('./keypress-service.js', () => ({
   keypressService: { sendAction: mockSendAction },
+}));
+
+vi.mock('../features/graphics/graphics.service.js', () => ({
+  graphicsService: { applyQualityPreset: mockApplyQualityPreset },
 }));
 
 // Now import the module under test
@@ -74,8 +79,8 @@ describe('ActionEngine', () => {
       expect(names).toContain('supercruise');
     });
 
-    it('should return exactly 22 macros', () => {
-      expect(actionEngine.getMacroNames()).toHaveLength(22);
+    it('should return exactly 23 macros', () => {
+      expect(actionEngine.getMacroNames()).toHaveLength(23);
     });
   });
 
@@ -135,12 +140,12 @@ describe('ActionEngine', () => {
       expect(mockSendAction).toHaveBeenCalledWith('DeployHardpointToggle');
     });
 
-    it('should skip hardpoint toggle when hardpoints are already deployed', async () => {
+    it('should skip hardpoint toggle when hardpoints are already deployed but still run side effect', async () => {
       mockGetState.mockReturnValue(makeState({ hardpointsDeployed: true }));
       const result = await actionEngine.executeMacro('combat_ready');
 
-      expect(result.success).toBe(false); // no steps executed
-      expect(result.stepsExecuted).toHaveLength(0);
+      expect(result.success).toBe(true); // side effect step still executed
+      expect(result.stepsExecuted).toContain('sideEffect');
       expect(result.stepsSkipped).toContain('DeployHardpointToggle');
       expect(mockSendAction).not.toHaveBeenCalled();
     });
@@ -159,12 +164,13 @@ describe('ActionEngine', () => {
       expect(result.stepsExecuted).toContain('DeployHardpointToggle');
     });
 
-    it('should skip when hardpoints are already retracted', async () => {
+    it('should skip toggle when hardpoints are already retracted but still run side effect', async () => {
       mockGetState.mockReturnValue(makeState({ hardpointsDeployed: false }));
       const result = await actionEngine.executeMacro('retract_weapons');
 
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true); // side effect step still executed
       expect(result.stepsSkipped).toContain('DeployHardpointToggle');
+      expect(result.stepsExecuted).toContain('sideEffect');
     });
   });
 
@@ -366,17 +372,17 @@ describe('ActionEngine', () => {
   // -----------------------------------------------------------------------
 
   describe('step failure handling', () => {
-    it('should mark steps as skipped when sendAction returns false', async () => {
+    it('should mark steps as skipped when sendAction returns false but still run side effects', async () => {
       mockGetState.mockReturnValue(makeState({ hardpointsDeployed: false }));
       mockSendAction.mockResolvedValue(false); // binding not resolved
 
       const result = await actionEngine.executeMacro('combat_ready');
 
       // condition was met (hardpoints not deployed) so it tried to send
-      // but sendAction failed, so it lands in skipped
-      expect(result.success).toBe(false);
-      expect(result.stepsExecuted).toHaveLength(0);
+      // but sendAction failed, so it lands in skipped; side effect still runs
+      expect(result.success).toBe(true); // side effect step executed
       expect(result.stepsSkipped).toContain('DeployHardpointToggle');
+      expect(result.stepsExecuted).toContain('sideEffect');
     });
 
     it('should report partial success when some steps succeed and others fail', async () => {

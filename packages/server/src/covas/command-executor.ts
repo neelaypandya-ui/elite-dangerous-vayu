@@ -236,6 +236,11 @@ const handlers: Record<string, CommandHandler> = {
     return { success: result.success, response: '', data: { macro: 'shield_cell', ...result } };
   },
 
+  action_exploration_mode: async () => {
+    const result = await actionEngine.executeMacro('exploration_mode');
+    return { success: result.success, response: '', data: { macro: 'exploration_mode', ...result } };
+  },
+
   search_commodity_buy: async (entities) => {
     const commodity = entities['commodity'] as string;
     if (!commodity) return { success: false, response: 'Which commodity are you looking to buy?' };
