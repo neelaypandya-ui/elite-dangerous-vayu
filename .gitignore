@@ -1,0 +1,36 @@
+node_modules/
+dist/
+*.js.map
+*.d.ts.map
+
+# Environment
+.env
+.env.local
+
+# Database
+data/*.db
+data/*.db-journal
+
+# Build artifacts
+packages/client/dist/
+packages/server/dist/
+packages/shared/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temp
+tmp/
+.tmp/
+nul

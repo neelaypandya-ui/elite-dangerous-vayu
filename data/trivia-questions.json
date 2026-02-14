@@ -1,0 +1,402 @@
+[
+  {
+    "id": 1,
+    "question": "What year is Elite Dangerous set in?",
+    "options": ["2900", "3100", "3300", "3500"],
+    "correctIndex": 2,
+    "category": "Lore",
+    "difficulty": "easy"
+  },
+  {
+    "id": 2,
+    "question": "Who founded the Pilots Federation?",
+    "options": ["The Federation", "The Empire", "An independent group of pilots", "The Alliance"],
+    "correctIndex": 2,
+    "category": "Lore",
+    "difficulty": "medium"
+  },
+  {
+    "id": 3,
+    "question": "What is the capital system of the Federation?",
+    "options": ["Sol", "Achenar", "Alioth", "Gateway"],
+    "correctIndex": 0,
+    "category": "Factions",
+    "difficulty": "easy"
+  },
+  {
+    "id": 4,
+    "question": "What is the capital system of the Empire?",
+    "options": ["Sol", "Achenar", "Alioth", "Cubeo"],
+    "correctIndex": 1,
+    "category": "Factions",
+    "difficulty": "easy"
+  },
+  {
+    "id": 5,
+    "question": "What is the capital system of the Alliance?",
+    "options": ["Sol", "Achenar", "Alioth", "Gateway"],
+    "correctIndex": 2,
+    "category": "Factions",
+    "difficulty": "easy"
+  },
+  {
+    "id": 6,
+    "question": "What ship does every new commander start with?",
+    "options": ["Eagle", "Sidewinder", "Hauler", "Adder"],
+    "correctIndex": 1,
+    "category": "Ships",
+    "difficulty": "easy"
+  },
+  {
+    "id": 7,
+    "question": "Which ship has the longest unengineered jump range?",
+    "options": ["Diamondback Explorer", "Asp Explorer", "Anaconda", "Hauler"],
+    "correctIndex": 2,
+    "category": "Ships",
+    "difficulty": "medium"
+  },
+  {
+    "id": 8,
+    "question": "What is the name of the alien race that has been attacking human settlements?",
+    "options": ["Guardians", "Thargoids", "Raxxla", "Formidine"],
+    "correctIndex": 1,
+    "category": "Lore",
+    "difficulty": "easy"
+  },
+  {
+    "id": 9,
+    "question": "What is the maximum Elite rank tier in the current game?",
+    "options": ["Elite", "Elite III", "Elite V", "Elite X"],
+    "correctIndex": 2,
+    "category": "Gameplay",
+    "difficulty": "medium"
+  },
+  {
+    "id": 10,
+    "question": "What fuel do fleet carriers use?",
+    "options": ["Hydrogen", "Helium-3", "Tritium", "Painite"],
+    "correctIndex": 2,
+    "category": "Gameplay",
+    "difficulty": "easy"
+  },
+  {
+    "id": 11,
+    "question": "Which engineer is located in Deciat and specializes in Frame Shift Drives?",
+    "options": ["Elvira Martuuk", "Felicity Farseer", "Professor Palin", "Marco Qwent"],
+    "correctIndex": 1,
+    "category": "Engineers",
+    "difficulty": "easy"
+  },
+  {
+    "id": 12,
+    "question": "What is the maximum number of fire groups a ship can have?",
+    "options": ["2", "4", "6", "8"],
+    "correctIndex": 3,
+    "category": "Gameplay",
+    "difficulty": "medium"
+  },
+  {
+    "id": 13,
+    "question": "Which manufacturer produces the Imperial Cutter?",
+    "options": ["Core Dynamics", "Faulcon DeLacy", "Gutamaya", "Lakon Spaceways"],
+    "correctIndex": 2,
+    "category": "Ships",
+    "difficulty": "easy"
+  },
+  {
+    "id": 14,
+    "question": "What extinct alien civilization left ruins and technology across the galaxy?",
+    "options": ["Thargoids", "Guardians", "The Club", "Raxxla"],
+    "correctIndex": 1,
+    "category": "Lore",
+    "difficulty": "easy"
+  },
+  {
+    "id": 15,
+    "question": "What is the name of the station in Shinrarta Dezhra that sells all ships and modules?",
+    "options": ["Hutton Orbital", "Jameson Memorial", "Coriolis Station", "Farseer Inc"],
+    "correctIndex": 1,
+    "category": "Gameplay",
+    "difficulty": "easy"
+  },
+  {
+    "id": 16,
+    "question": "What is the approximate distance to Colonia from Sol?",
+    "options": ["5,000 LY", "12,000 LY", "22,000 LY", "50,000 LY"],
+    "correctIndex": 2,
+    "category": "Navigation",
+    "difficulty": "medium"
+  },
+  {
+    "id": 17,
+    "question": "What type of star is safe for fuel scooping? (The KGB FOAM mnemonic)",
+    "options": ["Only K and G class", "K, G, B, F, O, A, M class", "All stars", "Only main sequence stars"],
+    "correctIndex": 1,
+    "category": "Gameplay",
+    "difficulty": "easy"
+  },
+  {
+    "id": 18,
+    "question": "What is the name of the supermassive black hole at the center of the Milky Way?",
+    "options": ["Colonia", "Sagittarius A*", "Beagle Point", "Explorer's Anchorage"],
+    "correctIndex": 1,
+    "category": "Navigation",
+    "difficulty": "easy"
+  },
+  {
+    "id": 19,
+    "question": "What is the farthest reachable system from Sol in Elite Dangerous?",
+    "options": ["Colonia", "Sagittarius A*", "Beagle Point", "Ishum's Reach"],
+    "correctIndex": 3,
+    "category": "Navigation",
+    "difficulty": "hard"
+  },
+  {
+    "id": 20,
+    "question": "Which rare commodity is famously associated with the Hutton Orbital mug joke?",
+    "options": ["Lavian Brandy", "Hutton Mug", "Leestian Evil Juice", "Fujin Tea"],
+    "correctIndex": 1,
+    "category": "Gameplay",
+    "difficulty": "medium"
+  },
+  {
+    "id": 21,
+    "question": "How long does it approximately take to reach Hutton Orbital from the arrival star?",
+    "options": ["5 minutes", "20 minutes", "1 hour 30 minutes", "3 hours"],
+    "correctIndex": 2,
+    "category": "Navigation",
+    "difficulty": "medium"
+  },
+  {
+    "id": 22,
+    "question": "What is the highest combat rank before the Elite tiers?",
+    "options": ["Dangerous", "Deadly", "Master", "Expert"],
+    "correctIndex": 1,
+    "category": "Gameplay",
+    "difficulty": "medium"
+  },
+  {
+    "id": 23,
+    "question": "What is the name of the on-foot expansion for Elite Dangerous?",
+    "options": ["Horizons", "Odyssey", "Beyond", "Frontiers"],
+    "correctIndex": 1,
+    "category": "Lore",
+    "difficulty": "easy"
+  },
+  {
+    "id": 24,
+    "question": "Which ship is known as the 'best medium combat ship' by the community?",
+    "options": ["Python", "Krait Mk II", "Fer-de-Lance", "Mamba"],
+    "correctIndex": 2,
+    "category": "Ships",
+    "difficulty": "medium"
+  },
+  {
+    "id": 25,
+    "question": "What material is the most valuable mined commodity in the game's history?",
+    "options": ["Low Temperature Diamonds", "Void Opals", "Painite", "Musgravite"],
+    "correctIndex": 2,
+    "category": "Gameplay",
+    "difficulty": "hard"
+  },
+  {
+    "id": 26,
+    "question": "What is the name of the mysterious figure/organization rumored to control events behind the scenes?",
+    "options": ["The Guardians", "The Dark Wheel", "The Club", "Azimuth Biochemicals"],
+    "correctIndex": 2,
+    "category": "Lore",
+    "difficulty": "hard"
+  },
+  {
+    "id": 27,
+    "question": "What happens when your ship is destroyed and you cannot afford the rebuy cost?",
+    "options": ["Game over permanently", "You get a free Anaconda", "You are given a loaned Sidewinder", "The Pilots Federation pays for you"],
+    "correctIndex": 2,
+    "category": "Gameplay",
+    "difficulty": "easy"
+  },
+  {
+    "id": 28,
+    "question": "Which of these is NOT a Thargoid vessel variant?",
+    "options": ["Cyclops", "Basilisk", "Hydra", "Phantom"],
+    "correctIndex": 3,
+    "category": "Lore",
+    "difficulty": "medium"
+  },
+  {
+    "id": 29,
+    "question": "What does the FSD module stand for?",
+    "options": ["Faster-than-light Speed Drive", "Frame Shift Drive", "Fuel System Drive", "Forward Supercruise Device"],
+    "correctIndex": 1,
+    "category": "Gameplay",
+    "difficulty": "easy"
+  },
+  {
+    "id": 30,
+    "question": "Which ship manufacturer is associated with the Alliance faction?",
+    "options": ["Gutamaya", "Core Dynamics", "Lakon Spaceways", "Saud Kruger"],
+    "correctIndex": 2,
+    "category": "Ships",
+    "difficulty": "medium"
+  },
+  {
+    "id": 31,
+    "question": "What is the name of the current Emperor of the Empire?",
+    "options": ["Arissa Lavigny-Duval", "Aisling Duval", "Denton Patreus", "Zemina Torval"],
+    "correctIndex": 0,
+    "category": "Factions",
+    "difficulty": "medium"
+  },
+  {
+    "id": 32,
+    "question": "What is the name of the current President of the Federation?",
+    "options": ["Zachary Hudson", "Felicia Winters", "Jerome Archer", "Shadow President Winters"],
+    "correctIndex": 2,
+    "category": "Factions",
+    "difficulty": "hard"
+  },
+  {
+    "id": 33,
+    "question": "What module allows you to scan the composition of a planet's surface for biological signals?",
+    "options": ["Full Spectrum Scanner", "Detailed Surface Scanner", "Discovery Scanner", "Kill Warrant Scanner"],
+    "correctIndex": 1,
+    "category": "Gameplay",
+    "difficulty": "easy"
+  },
+  {
+    "id": 34,
+    "question": "What is the maximum engineering grade for ship modules?",
+    "options": ["3", "4", "5", "10"],
+    "correctIndex": 2,
+    "category": "Engineers",
+    "difficulty": "easy"
+  },
+  {
+    "id": 35,
+    "question": "Which nebula in the game is famous for Thargoid activity?",
+    "options": ["Horsehead Nebula", "Pleiades Nebula", "Orion Nebula", "Coalsack Nebula"],
+    "correctIndex": 1,
+    "category": "Lore",
+    "difficulty": "easy"
+  },
+  {
+    "id": 36,
+    "question": "What is the name of the mysterious location that has never been found in-game?",
+    "options": ["Raxxla", "The Club", "The Void", "Dark Space"],
+    "correctIndex": 0,
+    "category": "Lore",
+    "difficulty": "medium"
+  },
+  {
+    "id": 37,
+    "question": "Which SRV type is the original ground vehicle in Horizons?",
+    "options": ["Scarab SRV", "Scorpion SRV", "Taipan Fighter", "Condor Fighter"],
+    "correctIndex": 0,
+    "category": "Gameplay",
+    "difficulty": "easy"
+  },
+  {
+    "id": 38,
+    "question": "What is the base cost of a Fleet Carrier?",
+    "options": ["1 billion credits", "3 billion credits", "5 billion credits", "10 billion credits"],
+    "correctIndex": 2,
+    "category": "Gameplay",
+    "difficulty": "medium"
+  },
+  {
+    "id": 39,
+    "question": "Which type of mining involves cracking open asteroids for core materials?",
+    "options": ["Laser Mining", "Core Mining", "Surface Mining", "Deep Mining"],
+    "correctIndex": 1,
+    "category": "Gameplay",
+    "difficulty": "easy"
+  },
+  {
+    "id": 40,
+    "question": "What is the name of CMDR Jameson's lost ship that can be found as a crashed site?",
+    "options": ["Cobra Mk III", "Anaconda", "Sidewinder", "Hauler"],
+    "correctIndex": 0,
+    "category": "Lore",
+    "difficulty": "hard"
+  },
+  {
+    "id": 41,
+    "question": "Which Power in Powerplay offers prismatic shields as a special module?",
+    "options": ["Aisling Duval", "Arissa Lavigny-Duval", "Zachary Hudson", "Li Yong-Rui"],
+    "correctIndex": 0,
+    "category": "Factions",
+    "difficulty": "medium"
+  },
+  {
+    "id": 42,
+    "question": "What is the name of the generation ships that can be found drifting in space?",
+    "options": ["Megaships", "Generation Ships", "Capital Ships", "Colony Vessels"],
+    "correctIndex": 1,
+    "category": "Lore",
+    "difficulty": "easy"
+  },
+  {
+    "id": 43,
+    "question": "How many major superpowers exist in Elite Dangerous?",
+    "options": ["2", "3", "4", "5"],
+    "correctIndex": 1,
+    "category": "Factions",
+    "difficulty": "easy"
+  },
+  {
+    "id": 44,
+    "question": "Which ship is the largest purchasable vessel (excluding fleet carriers)?",
+    "options": ["Imperial Cutter", "Federal Corvette", "Type-9 Heavy", "Beluga Liner"],
+    "correctIndex": 0,
+    "category": "Ships",
+    "difficulty": "hard"
+  },
+  {
+    "id": 45,
+    "question": "What is a 'neutron star boost' used for?",
+    "options": ["Increasing weapon damage", "Quadrupling FSD jump range", "Recharging shields faster", "Mining efficiency"],
+    "correctIndex": 1,
+    "category": "Gameplay",
+    "difficulty": "medium"
+  },
+  {
+    "id": 46,
+    "question": "Which organization created the Thargoid-killing superweapon Proteus Wave?",
+    "options": ["Sirius Corporation", "Azimuth Biochemicals", "The Pilots Federation", "The Alliance"],
+    "correctIndex": 1,
+    "category": "Lore",
+    "difficulty": "hard"
+  },
+  {
+    "id": 47,
+    "question": "What is the name of the permit-locked region surrounding Sol?",
+    "options": ["Core Systems", "Sol Bubble", "Federal Space", "The Bubble"],
+    "correctIndex": 0,
+    "category": "Navigation",
+    "difficulty": "hard"
+  },
+  {
+    "id": 48,
+    "question": "Which ship can be obtained for free by all new players?",
+    "options": ["Sidewinder", "Eagle", "Hauler", "Cobra Mk III"],
+    "correctIndex": 0,
+    "category": "Ships",
+    "difficulty": "easy"
+  },
+  {
+    "id": 49,
+    "question": "What is the approximate diameter of the Milky Way galaxy in Elite Dangerous?",
+    "options": ["50,000 LY", "75,000 LY", "100,000 LY", "200,000 LY"],
+    "correctIndex": 2,
+    "category": "Navigation",
+    "difficulty": "medium"
+  },
+  {
+    "id": 50,
+    "question": "Which company developed Elite Dangerous?",
+    "options": ["CCP Games", "Frontier Developments", "Roberts Space Industries", "Hello Games"],
+    "correctIndex": 1,
+    "category": "Lore",
+    "difficulty": "easy"
+  }
+]

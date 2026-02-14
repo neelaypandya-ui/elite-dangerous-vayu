@@ -1,0 +1,97 @@
+{
+  "materialCategories": [
+    {
+      "category": "Goods",
+      "description": "Physical items found at settlements and carried in backpack",
+      "subcategories": [
+        { "name": "Assets", "description": "Useful items like power regulators, health monitors, and data ports", "examples": ["Power Regulator", "Health Monitor", "Suit Schematic", "Weapon Schematic", "Vehicle Schematic", "Ionised Gas", "Chemical Superbase", "Graphene"] },
+        { "name": "Consumables", "description": "Single-use items for on-foot gameplay", "examples": ["Medkit", "Energy Cell", "Frag Grenade", "Shield Disruptor", "E-Breach"] },
+        { "name": "Stolen Goods", "description": "Items flagged as stolen from settlements", "examples": ["Any Asset item when taken from locked containers or unauthorized areas"] }
+      ]
+    },
+    {
+      "category": "Data",
+      "description": "Digital data obtained from scanning terminals and data ports",
+      "subcategories": [
+        { "name": "Financial", "description": "Economic and financial records", "examples": ["Financial Projections", "Manufacturing Instructions", "Maintenance Logs"] },
+        { "name": "Industrial", "description": "Industrial and manufacturing data", "examples": ["Chemical Formulae", "Chemical Experiment Data", "Production Reports", "Production Schedule"] },
+        { "name": "Security", "description": "Security-related intelligence", "examples": ["Security Expenses", "Patrol Routes", "Settlement Defence Plans", "Tactical Plans"] },
+        { "name": "Surveillance", "description": "Monitoring and surveillance records", "examples": ["Surveillance Logs", "Personnel Performance Data", "Settlement Assault Plans"] },
+        { "name": "Scientific", "description": "Research and scientific data", "examples": ["Genetic Research", "Medical Trial Records", "Pharmaceutical Patents", "Biological Weapon Data"] },
+        { "name": "Political", "description": "Political and diplomatic data", "examples": ["Propaganda", "Political Affiliations", "Faction Associates", "Classified Intelligence"] }
+      ]
+    },
+    {
+      "category": "Components",
+      "description": "Micro-components used for on-foot equipment upgrades",
+      "subcategories": [
+        { "name": "Circuits", "description": "Electronic circuit components", "examples": ["Circuit Board", "Circuit Switch", "Electrical Wiring", "Microelectrode"] },
+        { "name": "Chemicals", "description": "Chemical compounds", "examples": ["Chemical Catalyst", "Chemical Superbase", "Epoxy Adhesive", "Ionic Solutions"] },
+        { "name": "Tech", "description": "Technology components", "examples": ["Memory Chip", "Micro Transformer", "Optical Fibre", "Scrambler"] },
+        { "name": "Structural", "description": "Physical structural components", "examples": ["Carbon Fibre Plating", "Titanium Plating", "Tungsten Carbide", "Ceramic Composite"] }
+      ]
+    }
+  ],
+  "settlementTypes": [
+    {
+      "type": "Agricultural",
+      "description": "Food production and farming facilities",
+      "typicalSecurity": "Low",
+      "commonMaterials": ["Chemical Catalyst", "Genetic Research", "Production Reports"]
+    },
+    {
+      "type": "Extraction",
+      "description": "Mining and mineral extraction operations",
+      "typicalSecurity": "Medium",
+      "commonMaterials": ["Mineral Oil", "Tungsten Carbide", "Production Schedule"]
+    },
+    {
+      "type": "Industrial",
+      "description": "Manufacturing and processing facilities",
+      "typicalSecurity": "Medium",
+      "commonMaterials": ["Manufacturing Instructions", "Chemical Formulae", "Graphene"]
+    },
+    {
+      "type": "Military",
+      "description": "Military installations and bases",
+      "typicalSecurity": "High",
+      "commonMaterials": ["Tactical Plans", "Settlement Defence Plans", "Weapon Schematic"]
+    },
+    {
+      "type": "Research",
+      "description": "Scientific research laboratories",
+      "typicalSecurity": "Medium-High",
+      "commonMaterials": ["Medical Trial Records", "Pharmaceutical Patents", "Chemical Experiment Data"]
+    },
+    {
+      "type": "Tourism",
+      "description": "Tourist and hospitality facilities",
+      "typicalSecurity": "Low",
+      "commonMaterials": ["Financial Projections", "Propaganda", "Surveillance Logs"]
+    },
+    {
+      "type": "Power",
+      "description": "Energy generation and distribution",
+      "typicalSecurity": "Medium",
+      "commonMaterials": ["Power Regulator", "Electrical Wiring", "Maintenance Logs"]
+    },
+    {
+      "type": "Command",
+      "description": "Command and control centers",
+      "typicalSecurity": "High",
+      "commonMaterials": ["Classified Intelligence", "Patrol Routes", "Security Expenses"]
+    }
+  ],
+  "upgradeGrades": {
+    "suits": {
+      "maxGrade": 5,
+      "upgradeMethod": "Upgrade at Pioneer Supplies or via engineers",
+      "materialTypes": ["Components", "Goods", "Data"]
+    },
+    "weapons": {
+      "maxGrade": 5,
+      "upgradeMethod": "Upgrade at Pioneer Supplies or via engineers",
+      "materialTypes": ["Components", "Goods", "Data"]
+    }
+  }
+}

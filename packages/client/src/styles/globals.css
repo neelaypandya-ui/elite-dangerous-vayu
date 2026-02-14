@@ -1,0 +1,344 @@
+/* ============================================================
+   VAYU — Global Styles
+   Elite Dangerous dark theme with forest-green accents
+   ============================================================ */
+
+:root {
+  /* Background layers */
+  --color-bg-primary: #0a0e14;
+  --color-bg-secondary: #111923;
+  --color-bg-tertiary: #1a2332;
+  --color-bg-panel: #0d1117;
+
+  /* Borders */
+  --color-border: #1e3a2e;
+  --color-border-bright: #4e9a3e;
+
+  /* Text */
+  --color-text-primary: #e0e0e0;
+  --color-text-secondary: #8899aa;
+  --color-text-muted: #556677;
+
+  /* Accent — Elite forest green */
+  --color-accent: #4e9a3e;
+  --color-accent-bright: #6fcf5c;
+  --color-accent-dim: #2d5a28;
+
+  /* Semantic */
+  --color-warning: #ff8c00;
+  --color-danger: #ff4444;
+  --color-info: #4e9ad0;
+  --color-success: #4e9a3e;
+
+  /* Fonts */
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Share Tech Mono', monospace;
+  --font-mono: 'Share Tech Mono', monospace;
+
+  /* Spacing scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Border radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* Transitions */
+  --transition-fast: 120ms ease;
+  --transition-normal: 240ms ease;
+  --transition-slow: 480ms ease;
+}
+
+/* ---- Reset ---- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-dim);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* ---- Typography ---- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+h1 {
+  font-size: 2rem;
+  letter-spacing: 0.1em;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+a {
+  color: var(--color-accent-bright);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+code, pre {
+  font-family: var(--font-mono);
+}
+
+/* ---- Selection ---- */
+::selection {
+  background: var(--color-accent-dim);
+  color: var(--color-accent-bright);
+}
+
+/* ---- Utility Classes ---- */
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+.text-info {
+  color: var(--color-info);
+}
+
+.text-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* ---- Page Layout ---- */
+.page {
+  height: 100%;
+  width: 100%;
+  padding: var(--space-xl);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.page h1 {
+  margin-bottom: var(--space-sm);
+  color: var(--color-accent-bright);
+  text-shadow: 0 0 20px rgba(78, 154, 62, 0.3);
+}
+
+.page p {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+/* ---- Panel ---- */
+.panel {
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.panel-header {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--color-border-bright);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-accent-bright);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn:hover {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent-bright);
+  box-shadow: 0 0 12px rgba(78, 154, 62, 0.2);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent);
+}
+
+.btn-primary:hover {
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+}
+
+.btn-danger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.btn-danger:hover {
+  background: rgba(255, 68, 68, 0.15);
+}
+
+/* ---- Badge / Tag ---- */
+.badge {
+  display: inline-block;
+  padding: 2px var(--space-sm);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--color-border-bright);
+  border-radius: var(--radius-sm);
+  color: var(--color-accent);
+}
+
+.badge-warning {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.badge-danger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+/* ---- Divider ---- */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-md) 0;
+}
+
+/* ---- Grid helpers ---- */
+.grid {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ---- Flex helpers ---- */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.gap-sm {
+  gap: var(--space-sm);
+}
+
+.gap-md {
+  gap: var(--space-md);
+}
+
+.gap-lg {
+  gap: var(--space-lg);
+}
